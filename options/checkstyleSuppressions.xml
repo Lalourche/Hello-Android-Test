@@ -6,8 +6,8 @@
 
 <suppressions>
     <suppress checks="JavadocPackage" files=".*Test\.java$"/>
-    <suppress checks="." files=".*BuildConfig\.java$"/>
+    <!-- suppress checks="." files=".*BuildConfig\.java$"/>
     <suppress checks="." files=".*R\.java$"/>
-    <suppress checks="." files=".*project\.properties$"/>
-    <!--suppress checks="." files="gen[\\/]fr[\\/]lalourche[\\/]helloandroid[\\/]"/-->
+    <suppress checks="." files=".*project\.properties$"/-->
+    <suppress checks="." files="gen[\\/].*"/>
 </suppressions>
