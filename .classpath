@@ -5,5 +5,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/HelloAndroid"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="lib" path="lib/robotium-solo-3.6.jar" sourcepath="lib/robotium-solo-3.6-javadoc.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/HelloAndroidTest/lib/robotium-solo-3.6-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

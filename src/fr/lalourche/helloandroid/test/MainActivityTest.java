@@ -10,12 +10,16 @@ import fr.lalourche.helloandroid.R;
 import fr.lalourche.helloandroid.test.util.TouchUtilsEventListener;
 import fr.lalourche.helloandroid.test.util.TouchUtilsWithEvents;
 
+import com.jayway.android.robotium.solo.Solo;
+
+import android.content.res.Resources;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 
 
@@ -28,12 +32,17 @@ public class MainActivityTest
 {
   /** Main activity to test. */
   private MainActivity activity_;
+  /** Activity resources. */
+  private Resources resources_;
   /** Input text field for name. */
   private EditText nameInput_;
   /** Valid button. */
   private Button validButton_;
   /** Greetings text. */
   private TextView helloText_;
+
+  /** Robotium solo. */
+  private Solo solo_;
 
   /**
    * Default constructor.
@@ -53,9 +62,12 @@ public class MainActivityTest
 
     // Retrieve main components
     activity_ = getActivity();
+    resources_ = activity_.getResources();
     nameInput_ = (EditText) activity_.findViewById(R.id.name);
     validButton_ = (Button) activity_.findViewById(R.id.nameButton);
     helloText_ = (TextView) activity_.findViewById(R.id.text);
+
+    solo_ = new Solo(getInstrumentation(), getActivity());
   }
 
   /* (non-Javadoc)
@@ -65,6 +77,7 @@ public class MainActivityTest
   protected final void tearDown() throws Exception
   {
     getActivity().finish();
+    solo_.finishOpenedActivities();
     super.tearDown();
   }
 
@@ -91,8 +104,9 @@ public class MainActivityTest
     TouchUtils.tapView(this, validButton_);
 
     // Check the Hello
-    String format = (String) activity_.getResources().getText(R.string.hello);
-    assertEquals(MessageFormat.format(format, theName), helloText_.getText());
+    String format = (String) resources_.getText(R.string.hello);
+    assertEquals(MessageFormat.format(format, theName),
+        helloText_.getText().toString());
   }
 
   /**
@@ -121,6 +135,34 @@ public class MainActivityTest
 
     // Check police size at the end of the movement
     checkValidButtonTextSize(buttonCenterX, buttonCenterY);
+  }
+
+  /**
+   * Testing the display of the toast.
+   */
+  public final void testToast()
+  {
+    // Check that we have the right activity
+    solo_.assertCurrentActivity("Wrong activity !", MainActivity.class);
+
+    // Input non-admin name
+    String theName = "NotAdmin";
+    solo_.enterText(nameInput_, theName);
+
+    // Test that the Toast does not show up
+    String expectedToastString =
+        (String) resources_.getText(R.string.toast);
+    assertFalse("Expected a Toast !",
+        solo_.waitForText(expectedToastString, 1, 2000));
+
+    // Input admin name
+    solo_.clearEditText(nameInput_);
+    theName = (String) resources_.getText(R.string.adminName);
+    solo_.enterText(nameInput_, theName);
+
+    // Test that the Toast shows up
+    assertTrue("Expected a Toast !",
+        solo_.waitForText(expectedToastString, 1, 2000));
   }
 
   /**
