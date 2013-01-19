@@ -1,5 +1,5 @@
 /**
- * Main test for Portrait view.
+ * Main test (landscape).
  */
 package fr.lalourche.helloandroid.test;
 
@@ -10,7 +10,7 @@ import com.jayway.android.robotium.solo.Solo;
  * @author Lalourche
  *
  */
-public class MainActivityTest extends MainActivityAbstractTest
+public class MainActivityLandscapeTest extends MainActivityAbstractTest
 {
   /* (non-Javadoc)
    * @see MainActivityAbstract#updateSolo()
@@ -18,6 +18,6 @@ public class MainActivityTest extends MainActivityAbstractTest
   @Override
   protected final void updateSolo()
   {
-    getSolo().setActivityOrientation(Solo.PORTRAIT);
+    getSolo().setActivityOrientation(Solo.LANDSCAPE);
   }
 }
