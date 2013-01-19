@@ -14,11 +14,12 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.content.res.Resources;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 
@@ -36,8 +37,14 @@ public class MainActivityTest
   private Resources resources_;
   /** Input text field for name. */
   private EditText nameInput_;
+  /** Menu button. */
+  private ToggleButton menuButton_;
+  /** Menu layout. */
+  private View menuLayout_;
   /** Valid button. */
   private Button validButton_;
+  /** Valid button label. */
+  private String validButtonLabel_;
   /** Greetings text. */
   private TextView helloText_;
 
@@ -64,10 +71,16 @@ public class MainActivityTest
     activity_ = getActivity();
     resources_ = activity_.getResources();
     nameInput_ = (EditText) activity_.findViewById(R.id.name);
+    menuButton_ = (ToggleButton) activity_.findViewById(R.id.menuButton);
+    menuLayout_ = activity_.findViewById(R.id.menuLayout);
     validButton_ = (Button) activity_.findViewById(R.id.nameButton);
+    validButtonLabel_ = (String) resources_.getText(R.string.nameButton_label);
     helloText_ = (TextView) activity_.findViewById(R.id.text);
 
     solo_ = new Solo(getInstrumentation(), getActivity());
+
+    // Check that we have the right activity
+    solo_.assertCurrentActivity("Wrong activity !", MainActivity.class);
   }
 
   /* (non-Javadoc)
@@ -97,11 +110,10 @@ public class MainActivityTest
   {
     // Input a name
     String theName = "Chub";
-    TouchUtils.tapView(this, nameInput_);
-    getInstrumentation().sendStringSync(theName);
+    solo_.enterText(nameInput_, theName);
 
     // Click on valid button
-    TouchUtils.tapView(this, validButton_);
+    solo_.clickOnButton(validButtonLabel_);
 
     // Check the Hello
     String format = (String) resources_.getText(R.string.hello);
@@ -142,9 +154,6 @@ public class MainActivityTest
    */
   public final void testToast()
   {
-    // Check that we have the right activity
-    solo_.assertCurrentActivity("Wrong activity !", MainActivity.class);
-
     // Input non-admin name
     String theName = "NotAdmin";
     solo_.enterText(nameInput_, theName);
@@ -184,5 +193,35 @@ public class MainActivityTest
 
 //    Log.d("Lalourche", Float.toString(delta));
     assertTrue("Incorrect size for valid button !", delta < epsilon);
+  }
+
+  /**
+   * Testing the display/hiding of the menu.
+   */
+  public final void testMenu()
+  {
+    // Test that menu is visible at init
+    assertTrue("Menu button shall be activated at init",
+        menuButton_.isChecked());
+    assertTrue("Menu shall be visible at init",
+        menuLayout_.getVisibility() == View.VISIBLE);
+
+    // Test the hiding
+    String toggleButtonLabel =
+        (String) resources_.getText(R.string.menuButton_label);
+    solo_.clickOnToggleButton(toggleButtonLabel);
+    solo_.sleep(3000);
+    assertTrue("Menu button shall be deactivated",
+        !menuButton_.isChecked());
+    assertTrue("Menu shall be hidden",
+        menuLayout_.getVisibility() == View.GONE);
+
+    // Test the showing
+    solo_.clickOnToggleButton(toggleButtonLabel);
+    solo_.sleep(3000);
+    assertTrue("Menu button shall be activated",
+        menuButton_.isChecked());
+    assertTrue("Menu shall be visible",
+        menuLayout_.getVisibility() == View.VISIBLE);
   }
 }
