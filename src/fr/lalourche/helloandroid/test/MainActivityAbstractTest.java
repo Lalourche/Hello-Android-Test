@@ -4,9 +4,11 @@
 package fr.lalourche.helloandroid.test;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 
 import fr.lalourche.helloandroid.MainActivity;
 import fr.lalourche.helloandroid.R;
+import fr.lalourche.helloandroid.test.util.TestImageUtils;
 import fr.lalourche.helloandroid.test.util.TouchUtilsEventListener;
 import fr.lalourche.helloandroid.test.util.TouchUtilsWithEvents;
 
@@ -19,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -215,6 +218,48 @@ public abstract class MainActivityAbstractTest
         menuButton_.isChecked());
     assertTrue("Menu shall be visible",
         menuLayout_.getVisibility() == View.VISIBLE);
+  }
+
+  /**
+   * Testing the content of the menu.
+   */
+  public final void testMenuContent()
+  {
+    // Test that menu is visible at init
+    assertTrue("Menu shall be visible at init",
+        menuLayout_.getVisibility() == View.VISIBLE);
+
+    // Test the presence of texts
+    int foundR2D2 = 0;
+    int foundVador = 0;
+    ArrayList<TextView> texts = solo_.getCurrentTextViews(menuLayout_);
+    for (TextView text : texts) {
+      if (text.getText().toString()
+          .equals(resources_.getText(R.string.r2d2))) {
+        foundR2D2++;
+      }
+      if (text.getText().toString()
+          .equals(resources_.getText(R.string.darthvader))) {
+        foundVador++;
+      }
+    }
+    assertEquals("One and only one R2D2 text expected !", 1, foundR2D2);
+    assertEquals("One and only one Vader text expected !", 1, foundVador);
+
+    // Test the presence of images
+    foundR2D2 = 0;
+    foundVador = 0;
+    ArrayList<ImageView> images = solo_.getCurrentImageViews();
+    for (ImageView image : images) {
+      if (TestImageUtils.isEqual(activity_, image, R.drawable.r2d2)) {
+        foundR2D2++;
+      }
+      if (TestImageUtils.isEqual(activity_, image, R.drawable.darthvader)) {
+        foundVador++;
+      }
+    }
+    assertEquals("One and only one R2D2 image expected !", 1, foundR2D2);
+    assertEquals("One and only one Vader image expected !", 1, foundVador);
   }
 
   /**
