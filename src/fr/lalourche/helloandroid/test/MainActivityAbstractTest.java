@@ -221,6 +221,32 @@ public abstract class MainActivityAbstractTest
   }
 
   /**
+   * Testing the about dialog.
+   */
+  public final void testAbout()
+  {
+    // Open Menu
+    solo_.sendKey(Solo.MENU);
+
+    // Select About
+    solo_.clickOnText((String) resources_.getText(R.string.aboutLabel));
+
+    // Check the version displayed
+    solo_.waitForFragmentByTag(resources_.getString(R.string.tag_about_dialog));
+    boolean foundVersion =
+        solo_.searchText((String) resources_.getText(R.string.version));
+    assertTrue("Expected current version display !", foundVersion);
+
+    // Close dialog and check it is closed
+    solo_.clickOnText((String) resources_.getText(android.R.string.ok));
+    // Does not work. Bug Robotium ?
+//    boolean aboutClosed = solo_.waitForDialogToClose(5000);
+    boolean aboutClosed =
+        !solo_.searchText((String) resources_.getText(R.string.version));
+    assertTrue("Expected about dialog closed !", aboutClosed);
+  }
+
+  /**
    * Testing the content of the menu.
    */
   public final void testMenuContent()
