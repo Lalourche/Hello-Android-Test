@@ -34,7 +34,7 @@ public abstract class MainActivityAbstractTest
   extends ActivityInstrumentationTestCase2<MainActivity>
 {
   /** Current version. */
-  private static final String VERSION = "1.0";
+  private static final String VERSION = "0.0";
 
   /** Main activity to test. */
   private Activity activity_;
