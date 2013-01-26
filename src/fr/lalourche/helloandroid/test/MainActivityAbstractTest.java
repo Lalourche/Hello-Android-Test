@@ -33,6 +33,9 @@ import android.widget.ToggleButton;
 public abstract class MainActivityAbstractTest
   extends ActivityInstrumentationTestCase2<MainActivity>
 {
+  /** Current version. */
+  private static final String VERSION = "1.0";
+
   /** Main activity to test. */
   private Activity activity_;
   /** Activity resources. */
@@ -233,16 +236,14 @@ public abstract class MainActivityAbstractTest
 
     // Check the version displayed
     solo_.waitForFragmentByTag(resources_.getString(R.string.tag_about_dialog));
-    boolean foundVersion =
-        solo_.searchText((String) resources_.getText(R.string.version));
+    boolean foundVersion = solo_.searchText(VERSION);
     assertTrue("Expected current version display !", foundVersion);
 
     // Close dialog and check it is closed
     solo_.clickOnText((String) resources_.getText(android.R.string.ok));
     // Does not work. Bug Robotium ?
 //    boolean aboutClosed = solo_.waitForDialogToClose(5000);
-    boolean aboutClosed =
-        !solo_.searchText((String) resources_.getText(R.string.version));
+    boolean aboutClosed = !solo_.searchText(VERSION);
     assertTrue("Expected about dialog closed !", aboutClosed);
   }
 
@@ -259,13 +260,15 @@ public abstract class MainActivityAbstractTest
     int foundR2D2 = 0;
     int foundVador = 0;
     ArrayList<TextView> texts = solo_.getCurrentTextViews(menuLayout_);
-    for (TextView text : texts) {
-      if (text.getText().toString()
-          .equals(resources_.getText(R.string.r2d2))) {
+    for (TextView text : texts)
+    {
+      if (text.getText().toString().equals(resources_.getText(R.string.r2d2)))
+      {
         foundR2D2++;
       }
       if (text.getText().toString()
-          .equals(resources_.getText(R.string.darthvader))) {
+          .equals(resources_.getText(R.string.darthvader)))
+      {
         foundVador++;
       }
     }
@@ -276,11 +279,14 @@ public abstract class MainActivityAbstractTest
     foundR2D2 = 0;
     foundVador = 0;
     ArrayList<ImageView> images = solo_.getCurrentImageViews();
-    for (ImageView image : images) {
-      if (TestImageUtils.isEqual(activity_, image, R.drawable.r2d2)) {
+    for (ImageView image : images)
+    {
+      if (TestImageUtils.isEqual(activity_, image, R.drawable.r2d2))
+      {
         foundR2D2++;
       }
-      if (TestImageUtils.isEqual(activity_, image, R.drawable.darthvader)) {
+      if (TestImageUtils.isEqual(activity_, image, R.drawable.darthvader))
+      {
         foundVador++;
       }
     }
