@@ -43,10 +43,12 @@ public final class TestImageUtils
     Drawable referenceDrawable = context.getResources().getDrawable(drawableId);
 
     if (referenceDrawable instanceof BitmapDrawable &&
-        drawable instanceof BitmapDrawable) {
+        drawable instanceof BitmapDrawable)
+    {
       Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
       Bitmap referenceBitmap = ((BitmapDrawable) referenceDrawable).getBitmap();
-      result = bitmap == referenceBitmap;
+
+      result = bitmap.sameAs(referenceBitmap);
     }
 
     return result;
